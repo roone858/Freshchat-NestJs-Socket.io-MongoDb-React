@@ -1,6 +1,7 @@
 import React, { FormEvent, useState } from "react";
 import { login } from "../../services/auth.service";
 import { setTokenInAxios } from "../../utils/axios";
+import { Link } from "react-router-dom";
 
 export default function Login() {
   const [data, setData] = useState<{
@@ -20,7 +21,7 @@ export default function Login() {
         password: data.password,
       });
       sessionStorage.setItem("accessToken", response.access_token);
-      setTokenInAxios(response.access_token);
+      setTokenInAxios();
       sessionStorage.setItem("user", JSON.stringify(response.user));
       window.location.href = "/";
       setErr(false);
@@ -37,7 +38,7 @@ export default function Login() {
             href="#"
             className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
           >
-            <h1 className="text-white">Autolead</h1>
+            <h1 className="text-white">FreshChat</h1>
           </a>
           <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -102,12 +103,11 @@ export default function Login() {
                       </label>
                     </div>
                   </div>
-                  <a
-                    href="#"
-                    className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
-                  >
-                    Forgot password?
-                  </a>
+                  <Link to={"forget"}>
+                    <div className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">
+                      Forgot password?
+                    </div>
+                  </Link>
                 </div>
                 {err && (
                   <div

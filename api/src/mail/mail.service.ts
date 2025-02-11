@@ -12,25 +12,22 @@ export class MailService {
   private groupInviteTemplate: handlebars.TemplateDelegate;
 
   constructor() {
-  
-    this.transporter = nodemailer.createTransport(
-      {
-        host: process.env.MAIL_HOST,
-        secure: process.env.MAILER_SECURE === 'true',
-        auth: {
-          user: process.env.MAIL_USER,
-          pass: process.env.MAIL_PASSWORD,
-        },
+    this.transporter = nodemailer.createTransport({
+      service: process.env.MAIL_HOST,
+      secure: process.env.MAILER_SECURE === 'true',
+      auth: {
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASSWORD,
       },
-      {
-        from: {
-          name: 'No-reply',
-          address: process.env.MAIL_FROM,
-        },
-      },
-    );
+    });
 
-    // // Load Handlebars templates
+    // {
+    //   from: {
+    //     name: 'No-reply',
+    //     address: process.env.MAIL_FROM,
+    //   },
+    // },
+    // // // Load Handlebars templates
     // this.confirmationTemplate = this.loadTemplate('confirmation.hbs');
   }
 
@@ -41,6 +38,21 @@ export class MailService {
   //   const templateSource = fs.readFileSync(templatePath, 'utf8');
   //   return handlebars.compile(templateSource);
   // }
+  async sendResetPasswordEmail(email: string, code: string) {
+    // const resetLink = `https://yourfrontend.com/reset-password?token=${resetToken}`;
+
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: 'Password Reset Request',
+      html: `<p>You requested a password reset.</p>
+             <p>the Code below to reset your password:</p>
+           <h2>  ${code}</h2>
+             <p>This code will expire in 10 minutes.</p>`,
+    };
+
+    await this.transporter.sendMail(mailOptions);
+  }
 
   async sendUserConfirmation() {
     // const url = `${process.env.CLIENT_URL}?token=${token}`;

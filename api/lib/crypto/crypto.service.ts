@@ -34,6 +34,10 @@ export class CryptoService {
     return encrypted.toString('hex');
   }
 
+  static async generateResetCode() {
+    return crypto.randomInt(100000, 999999).toString();
+  }
+
   static async decrypt(encryptedText) {
     const decipher = crypto.createDecipheriv(
       ENCRYPTION_METHOD,

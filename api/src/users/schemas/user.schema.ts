@@ -64,6 +64,12 @@ export class User {
   @Prop({ required: true, type: mongoose.Schema.Types.ObjectId })
   teamId: mongoose.Schema.Types.ObjectId;
 
+  @Prop({ type: String, default: null }) // Reset code (optional)
+  resetPasswordCode?: string;
+
+  @Prop({ type: Date, default: null }) // Expiry time (optional)
+  resetPasswordExpires?: Date;
+
   isPasswordCorrect: (password: string) => Promise<boolean>;
 }
 

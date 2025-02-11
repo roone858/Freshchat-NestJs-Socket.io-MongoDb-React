@@ -64,7 +64,7 @@ export class UsersController {
     return this.usersService.removeMember(teamId, id);
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Get()
   findAll() {
     return this.usersService.findAll();
@@ -86,12 +86,16 @@ export class UsersController {
     return this.usersService.findOneForUser(username);
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+    return this.usersService.update(id, updateUserDto);
   }
 
+  @Post('reset-password/')
+  resetPassword(@Body() body: any) {
+    return this.usersService.resetPassword(body.email, body);
+  }
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {

@@ -3,6 +3,7 @@ import "./App.css";
 import Navbar from "./layouts/Navbar/Navbar";
 import Chat from "./pages/Chat";
 import Home from "./pages/Home";
+import Forget from "./pages/Forget";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
@@ -15,12 +16,22 @@ function App() {
   // }, [accessToken]);
 
   if (!accessToken) {
-    return <Login />;
+    return (
+      <>
+        <BrowserRouter>
+          <Navbar isLogin={!accessToken ? false : true} />
+          <Routes>
+            <Route path="/" element={<Login />} />{" "}
+            <Route path="/forget" element={<Forget />} />{" "}
+          </Routes>
+        </BrowserRouter>
+      </>
+    );
   }
   return (
     <>
       <BrowserRouter>
-        <Navbar />
+        <Navbar isLogin={!accessToken ? false : true} />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/chat/:username" element={<Chat />} />
