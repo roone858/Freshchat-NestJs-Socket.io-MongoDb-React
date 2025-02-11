@@ -1,4 +1,4 @@
-export interface MessageType {
+export interface Message {
   sender: string;
   timeSent: string;
   message: string;

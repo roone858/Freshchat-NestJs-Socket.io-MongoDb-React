@@ -70,6 +70,9 @@ export class User {
   @Prop({ type: Date, default: null }) // Expiry time (optional)
   resetPasswordExpires?: Date;
 
+  @Prop({ type: String, default: null }) // Explicitly set type to String
+  socketId: string | null;
+
   isPasswordCorrect: (password: string) => Promise<boolean>;
 }
 

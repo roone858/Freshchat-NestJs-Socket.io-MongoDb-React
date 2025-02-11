@@ -1,28 +1,41 @@
-// chat/chat.controller.ts
-import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Body,
+  Param,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
 import { ChatService } from './chat.service';
-import { MessageType } from './interfaces/message.interface'; // Update this import
-import { ChatGateway } from './chat.gateway';
+import { Message } from './interfaces/message.interface';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('chat')
 export class ChatController {
-  constructor(
-    private readonly chatService: ChatService,
-    private readonly chatGateway: ChatGateway,
-  ) {}
+  constructor(private readonly chatService: ChatService) {}
+
+  // Endpoint to send a message (Alternative to WebSockets)
   @UseGuards(JwtAuthGuard)
-  @Get('messages/:username')
-  async getMessages(
-    @Param('username') username: string,
-  ): Promise<MessageType[]> {
-    return this.chatService.getMessages(username);
+  @Post('send')
+  async sendMessage(
+    @Req() request: any, // 👈 احصل على المستخدم من الـ request
+    // @Param('sender') sender: string,
+    @Body() data: { sender: string; receiver: string; message: string },
+  ): Promise<Message> {
+    const sender = request.user._doc.username;
+    return this.chatService.saveMessage(sender, data.receiver, data.message);
   }
 
-  @Post('send')
-  async sendMessage(@Body() message: MessageType): Promise<MessageType> {
-    const savedMessage = await this.chatService.saveMessage(message);
-    this.chatGateway.server.emit('message', savedMessage);
-    return savedMessage;
+  // Get chat history between two users
+  @UseGuards(JwtAuthGuard)
+  @Get('history/:receiver')
+  async getChatHistory(
+    @Req() request: any, // 👈 احصل على المستخدم من الـ request
+    // @Param('sender') sender: string,
+    @Param('receiver') receiver: string,
+  ): Promise<Message[]> {
+    const sender = request.user._doc.username;
+    return this.chatService.getMessages(sender, receiver);
   }
 }

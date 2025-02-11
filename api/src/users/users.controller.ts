@@ -92,10 +92,6 @@ export class UsersController {
     return this.usersService.update(id, updateUserDto);
   }
 
-  @Post('reset-password/')
-  resetPassword(@Body() body: any) {
-    return this.usersService.resetPassword(body.email, body);
-  }
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {

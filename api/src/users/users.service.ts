@@ -119,48 +119,22 @@ export class UsersService {
     console.log(resetCode, resetCodeExpires);
     // 3. Save to database
 
-    // Check if the update was successful
-    // if (result.matchedCount === 0) {
-    //   throw new Error('No user found with this email');
-    // }
-
-    // if (result.modifiedCount === 0) {
-    //   throw new Error('Failed to update reset token');
-    // }
     // 4. Send email
   }
-  async resetPassword(email: string, data: any) {
-    const { code, newPassword } = data;
-
-    const user = await this.userModel.findOne({
-      email,
-      resetPasswordToken: code,
-      resetPasswordExpires: { $gt: Date.now() },
-    });
-
-    if (!user) {
-      throw new NotFoundException(
-        `User with Email ${email} not found or Invalid or expired code`,
-      );
-    }
-    // Hash the new password
-    const passwordHash = await CryptoService.hash(newPassword);
-
-    // Update user by username and set new password
-    const result = await this.userModel.updateOne(
-      { email: email }, // Filter by email
-      { $set: { password: passwordHash } }, // Update only password
+  async updateUserSocket(
+    usernameOrSocketId: string,
+    socketId: string | null,
+  ): Promise<void> {
+    await this.userModel.findOneAndUpdate(
+      {
+        $or: [
+          { username: usernameOrSocketId },
+          { socketId: usernameOrSocketId },
+        ],
+      },
+      { socketId },
+      { new: true },
     );
-
-    // Check if any document was matched
-    if (result.matchedCount === 0) {
-      throw new NotFoundException(`User with Email ${email} not found`);
-    }
-
-    return {
-      message: 'Password updated successfully',
-      modifiedCount: result.modifiedCount,
-    };
   }
   remove(id: number) {
     return `This action removes a #${id} user`;
