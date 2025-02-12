@@ -29,4 +29,16 @@ export class ChatService {
       .sort({ timeSent: 1 }) // 1 للترتيب تصاعدي (الأقدم أولًا) و -1 للأحدث أولًا
       .exec();
   }
+  async getLastMessage(sender: string, receiver: string) {
+    return this.messageModel
+      .findOne({
+        $or: [
+          { sender, receiver },
+          { sender: receiver, receiver: sender },
+        ],
+      })
+      .sort({ timeSent: -1 }) // ترتيب تنازلي للحصول على آخر رسالة
+      .select('message sender receiver createdAt')
+      .lean();
+  }
 }

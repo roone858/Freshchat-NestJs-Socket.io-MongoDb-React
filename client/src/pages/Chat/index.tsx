@@ -15,8 +15,9 @@ const Chat = () => {
   const [messages, setMessages] = useState<MessageType[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [user, setUser] = useState<User | null>(null);
-  const [receiver, setReceiver] = useState<User | null>(null);
+  const [friend, setFriend] = useState<User | null>(null);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [lastMessages, setLastMessages] = useState<MessageType[]>([]);
 
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -32,59 +33,113 @@ const Chat = () => {
   useEffect(() => {
     if (!socketRef.current) {
       socketRef.current = io("http://localhost:3001");
-
-      socketRef.current.on("receivePrivateMessage", (message: MessageType) => {
-        setMessages((prev) => [...prev, message]);
-        scrollToBottom();
-      });
     }
 
     setTokenInAxios();
     const currentUser = JSON.parse(sessionStorage.getItem("user") || "{}");
     if (currentUser?.username) {
+      socketRef.current.emit("getLastMessages", currentUser.username);
+
+      const handleLastMessages = (messages: MessageType[]) => {
+        setLastMessages(messages);
+        console.log(messages);
+      };
+
+      socketRef.current.on("lastMessages", handleLastMessages);
       setUser(currentUser);
       socketRef.current.emit("setUsername", currentUser.username);
     }
 
     return () => {
       socketRef.current?.disconnect();
+      socketRef.current?.off("lastMessages");
       socketRef.current = null;
     };
-  }, [scrollToBottom]);
+  }, []);
 
   useEffect(() => {
-    if (user && receiver) {
+    if (user && friend) {
       socketRef.current?.emit("getChatHistory", {
         sender: user.username,
-        receiver: receiver.username,
+        receiver: friend.username,
       });
 
-      socketRef.current?.on("chatHistory", (history: MessageType[]) => {
+      const handleHistory = (history: MessageType[]) => {
         setMessages(history);
         scrollToBottom();
-      });
+      };
+      const handleMessage = (message: MessageType) => {
+        if (friend?.username === message.sender)
+          setMessages((prev) => [...prev, message]);
+        setLastMessages((prev) => {
+          // تنظيف المصفوفة من القيم null
+          const filteredMessages = prev.filter((msg) => msg !== null);
+  
+          // البحث عن الرسالة القديمة لتحديثها
+          const existingIndex = filteredMessages.findIndex(
+            (msg) =>
+              msg.sender === message.sender || msg.receiver === message.sender
+          );
+  
+          if (existingIndex !== -1) {
+            // تحديث الرسالة القديمة
+            const updatedMessages = [...filteredMessages];
+            updatedMessages[existingIndex] = message;
+            return updatedMessages;
+          } else {
+            // إضافة الرسالة إذا لم تكن موجودة
+            return [...filteredMessages, message];
+          }
+        });
+        scrollToBottom();
+      };
+
+      socketRef.current?.on("chatHistory", handleHistory);
+      socketRef.current?.on("receivePrivateMessage", handleMessage);
 
       return () => {
-        socketRef.current?.off("chatHistory");
+        socketRef.current?.off("chatHistory", handleHistory);
+        socketRef.current?.off("receivePrivateMessage", handleMessage);
       };
     }
-  }, [receiver, scrollToBottom, user]);
+  }, [friend, user, scrollToBottom]);
 
   const sendMessage = useCallback(() => {
-    if (user && newMessage && receiver) {
+    if (user && newMessage && friend) {
       const message: MessageType = {
         sender: user.username,
-        receiver: receiver.username,
+        receiver: friend.username,
         message: newMessage,
         timeSent: new Date().toLocaleString("en-US"),
       };
       socketRef.current?.emit("sendPrivateMessage", message);
 
       setMessages((prev) => [...prev, message]);
+      setLastMessages((prev) => {
+        // تنظيف المصفوفة من القيم null
+        const filteredMessages = prev.filter((msg) => msg !== null);
+
+        // البحث عن الرسالة القديمة لتحديثها
+        const existingIndex = filteredMessages.findIndex(
+          (msg) =>
+            msg.sender === message.sender || msg.receiver === message.sender
+        );
+
+        if (existingIndex !== -1) {
+          // تحديث الرسالة القديمة
+          const updatedMessages = [...filteredMessages];
+          updatedMessages[existingIndex] = message;
+          return updatedMessages;
+        } else {
+          // إضافة الرسالة إذا لم تكن موجودة
+          return [...filteredMessages, message];
+        }
+      });
+
       setNewMessage("");
       scrollToBottom();
     }
-  }, [newMessage, receiver, scrollToBottom, user]);
+  }, [newMessage, friend, scrollToBottom, user]);
 
   const addEmoji = (emoji: { native: string }) => {
     setNewMessage((prev) => prev + emoji.native);
@@ -94,17 +149,21 @@ const Chat = () => {
   return (
     <div className="flex flex-row">
       <div className="flex-2 h-screen pt-16 overflow-y-auto">
-        <ChatList me={user} setReceiver={setReceiver} />
+        <ChatList
+          lastMessages={lastMessages}
+          me={user}
+          setReceiver={setFriend}
+        />
       </div>
-      {receiver ? (
+      {friend ? (
         <div className="flex-1 h-screen pt-14 flex flex-col bg-white dark:bg-zinc-800">
           <div className="p-4 border-b dark:border-zinc-600 flex items-center gap-3">
             <img
-              src={`../../src/assets/${receiver.image}`}
+              src={`../../src/assets/${friend.image}`}
               className="rounded-full h-9 w-9"
-              alt={receiver.name}
+              alt={friend.name}
             />
-            <h5 className="text-gray-800 dark:text-gray-50">{receiver.name}</h5>
+            <h5 className="text-gray-800 dark:text-gray-50">{friend.name}</h5>
           </div>
           <div
             ref={messagesContainerRef}
@@ -114,7 +173,7 @@ const Chat = () => {
               <MemoizedMessage
                 key={index}
                 me={user?.username === msg.sender}
-                user={user?.username === msg.sender ? user : receiver}
+                user={user?.username === msg.sender ? user : friend}
                 message={msg}
                 showAvatar={
                   index === 0 || messages[index - 1].sender !== msg.sender

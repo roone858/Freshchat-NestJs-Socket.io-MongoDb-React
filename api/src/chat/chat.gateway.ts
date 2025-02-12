@@ -87,4 +87,24 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     );
     client.emit('chatHistory', messages);
   }
+
+  @SubscribeMessage('getLastMessages')
+  async handleGetLastMessages(
+    @MessageBody() username: string,
+    @ConnectedSocket() client: Socket,
+  ) {
+    const users = await this.userService.getAllUsersExcept(username); // إحضار جميع المستخدمين باستثناء المستخدم الحالي
+
+    const lastMessages = await Promise.all(
+      users.map(async (user) => {
+        const lastMessage = await this.chatService.getLastMessage(
+          username,
+          user.username,
+        );
+        return lastMessage;
+      }),
+    );
+
+    client.emit('lastMessages', lastMessages);
+  }
 }

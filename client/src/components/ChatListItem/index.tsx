@@ -1,6 +1,6 @@
 import { User } from "../../types/types";
 
-const ChatListItem = ({ user }: { user: User }) => {
+const ChatListItem = ({ user ,lastMessage}: { lastMessage:string, user: User }) => {
   
  
   return (
@@ -24,7 +24,7 @@ const ChatListItem = ({ user }: { user: User }) => {
                 {user.name}
               </h5>
               <p className="mb-0 text-gray-500 truncate dark:text-gray-300 text-14">
-                Hey! there I'm available
+            {lastMessage ? lastMessage: "no message yet"}
               </p>
             </div>
             {user.socketId ? (

@@ -102,24 +102,11 @@ export class UsersService {
 
     return user;
   }
-  async forgotPassword(email: string) {
-    // 1. Find user by email
-    console.log(email);
-    const user = await this.userModel.findOne({
-      email,
-    });
-    console.log(user);
-    if (!user) {
-      throw new NotFoundException(`User with Email ${email} not found `);
-    }
-
-    // 2. Generate reset code and expiration (10 minutes)
-    const resetCode = CryptoService.generateResetCode();
-    const resetCodeExpires = Date.now() + 600000; // 10 minutes
-    console.log(resetCode, resetCodeExpires);
-    // 3. Save to database
-
-    // 4. Send email
+  async getAllUsersExcept(username: string) {
+    return this.userModel
+      .find({ username: { $ne: username } })
+      .select('username')
+      .lean();
   }
   async updateUserSocket(
     usernameOrSocketId: string,
