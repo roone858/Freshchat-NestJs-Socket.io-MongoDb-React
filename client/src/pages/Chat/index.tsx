@@ -257,13 +257,22 @@ const Chat = () => {
                 className="dropdown-toggle"
                 id="dropdownButton2"
                 data-bs-toggle="dropdown"
-              >
-                <img
-                  src={`../../src/assets/${user?.image}`}
-                  alt=""
-                  className="w-10 h-10 p-1 mx-auto rounded-full bg-gray-50 dark:bg-zinc-700"
-                />
-              </a>
+              ></a>
+              <Dropdown
+                items={[
+                  { label: "Profile", icon: "ri-profile-line" },
+                  { label: "Setting", icon: "ri-settings-3-line" },
+                  { label: "Lock Screen ", icon: "ri-git-repository-private-line" },
+                  { label: "Log out", icon: " ri-logout-circle-r-line" },
+                ]}
+                button={
+                  <img
+                    src={`../../src/assets/${user?.image}`}
+                    alt=""
+                    className="w-10 h-10 p-1 mx-auto shadow-xl  rounded-full bg-gray-50 dark:bg-zinc-800"
+                  />
+                }
+              />
 
               <ul
                 className="absolute z-40 hidden float-left w-40 py-2 mx-4 mb-12 text-left list-none bg-white border-none rounded-lg shadow-lg dropdown-menu bg-clip-padding dark:bg-zinc-700"
@@ -312,7 +321,9 @@ const Chat = () => {
         </div>
       </div>
       <div className="flex-2 h-screen overflow-y-auto bg-[#303841] pt-4">
-        <h5 className="px-5 mb-4 text-16 dark:text-gray-50 font-semibold">Recent</h5>
+        <h5 className="px-5 mb-4 text-16 dark:text-gray-50 font-semibold">
+          Recent
+        </h5>
         <ChatList
           lastMessages={lastMessages}
           me={user}
@@ -513,7 +524,23 @@ const Chat = () => {
                 </li>
 
                 <li className="px-3">
-                  <Dropdown button={<i className="ri-more-fill"></i>} />
+                  <Dropdown
+                    items={[
+                      {
+                        label: "Archive",
+                        icon: "ri-archive-line",
+                      },
+                      {
+                        label: " Muted",
+                        icon: " ri-volume-mute-line",
+                      },
+                      {
+                        label: "Delete",
+                        icon: "ri-delete-bin-line",
+                      },
+                    ]}
+                    button={<i className="ri-more-fill"></i>}
+                  />
                   <div className="relative dropdown"></div>
                 </li>
               </ul>
@@ -548,7 +575,7 @@ const Chat = () => {
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
                 type="text"
-                className="w-full p-2 rounded bg-gray-50 dark:bg-zinc-700 dark:text-gray-400"
+                className="w-full border-0 focus:outline-violet-500 outline-none focus:border-0 p-2 rounded bg-gray-50 dark:bg-zinc-700 dark:text-gray-400"
                 placeholder="Enter Message..."
               />
               {showEmojiPicker && (
