@@ -9,6 +9,7 @@ import { ChatIcon } from "../../icons";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import logo from "../../assets/logo.svg";
+import Dropdown from "../../lib/Popper/Dropdown";
 const MemoizedMessage = React.memo(Message);
 const Chat = () => {
   const socketRef = useRef<Socket | null>(null);
@@ -337,7 +338,7 @@ const Chat = () => {
                 <li className="px-3">
                   <div className="relative dropstart">
                     <button
-                      className="p-0 text-xl text-gray-500 border-0 btn dropdown-toggle dark:text-gray-300"
+                      className="p-0  text-xl text-gray-500 border-0 btn dropdown-toggle dark:text-gray-300"
                       type="button"
                       data-bs-toggle="dropdown"
                       id="dropdownMenuButton10"
@@ -346,7 +347,7 @@ const Chat = () => {
                       <i className="ri-search-line"></i>
                     </button>
                     <ul
-                      className="absolute z-50 hidden mt-2 text-left list-none bg-white border rounded-lg shadow-lg w-fit border-gray-50 dropdown-menu top-8 dark:bg-zinc-700 bg-clip-padding dark:border-gray-700"
+                      className="absolute z-40 hidden mt-2 text-left list-none bg-white border rounded-lg shadow-lg w-fit border-gray-50 dropdown-menu top-8 dark:bg-zinc-700 bg-clip-padding dark:border-gray-700"
                       aria-labelledby="dropdownMenuButton10"
                     >
                       <li className="p-2">
@@ -363,7 +364,7 @@ const Chat = () => {
                 <li>
                   <button
                     type="button"
-                    className="hidden text-xl text-gray-500 border-0 btn dark:text-gray-300 lg:block"
+                    className="hidden text-xl px-3 text-gray-500 border-0 btn dark:text-gray-300 lg:block"
                     data-tw-toggle="modal"
                     data-tw-target="#audiCallModal"
                   >
@@ -372,8 +373,8 @@ const Chat = () => {
                 </li>
 
                 {/* <!-- Modal start --> */}
-                <li className="relative z-50 hidden modal" id="audiCallModal">
-                  <div className="fixed inset-0 z-50 overflow-hidden">
+                <li className="relative z-40 hidden modal" id="audiCallModal">
+                  <div className="fixed inset-0 z-40 overflow-hidden">
                     <div className="absolute inset-0 transition-opacity bg-black bg-opacity-50 modal-overlay"></div>
                     <div className="flex items-center justify-center max-w-lg min-h-screen p-4 mx-auto text-center animate-translate">
                       <div className="relative w-full max-w-lg my-8 overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl -top-10 dark:bg-zinc-700">
@@ -430,7 +431,7 @@ const Chat = () => {
                 <li>
                   <button
                     type="button"
-                    className="hidden text-xl text-gray-500 border-0 btn dark:text-gray-300 lg:block"
+                    className="hidden text-xl px-3 text-gray-500 border-0 btn dark:text-gray-300 lg:block"
                     data-tw-toggle="modal"
                     data-tw-target="#videoCallModal"
                   >
@@ -440,10 +441,10 @@ const Chat = () => {
 
                 {/* <!-- Modal start --> */}
                 <li
-                  className="relative z-50 hidden modal dark:text-gray-300"
+                  className="relative px-3 z-40 hidden modal dark:text-gray-300"
                   id="videoCallModal"
                 >
-                  <div className="fixed inset-0 z-50 overflow-hidden">
+                  <div className="fixed inset-0 z-40 overflow-hidden">
                     <div className="absolute inset-0 transition-opacity bg-black bg-opacity-50 modal-overlay"></div>
                     <div className="flex items-center justify-center max-w-lg min-h-screen p-4 mx-auto text-center animate-translate">
                       <div className="relative w-full max-w-lg my-8 overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl -top-10 dark:bg-zinc-700">
@@ -511,78 +512,9 @@ const Chat = () => {
                 </li>
 
                 <li className="px-3">
+                  <Dropdown button={<i className="ri-more-fill"></i>} />
                   <div className="relative dropdown">
-                    <button
-                      className="p-0 text-xl text-gray-500 border-0 btn dropdown-toggle dark:text-gray-300"
-                      type="button"
-                      data-bs-toggle="dropdown"
-                      id="dropdownMenuButton11"
-                    >
-                      <i className="ri-more-fill"></i>
-                    </button>
-                    <ul
-                      className="absolute z-50 hidden w-40 py-2 mx-4 mt-2 text-left list-none bg-white border rounded shadow-lg ltr:-right-4 border-gray-50 dropdown-menu top-8 dark:bg-zinc-600 bg-clip-padding dark:border-gray-600/50 rtl:-left-5"
-                      aria-labelledby="dropdownMenuButton11"
-                    >
-                      <li className="block lg:hidden">
-                        <a
-                          className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent profileTab dropdown-item whitespace-nowrap hover:bg-gray-100/30 dark:text-gray-100 dark:hover:bg-zinc-700 ltr:text-left rtl:text-right"
-                          href="#"
-                        >
-                          View profile{" "}
-                          <i className="text-gray-500 rtl:float-left ltr:float-right dark:text-gray-300 ri-user-2-line text-16"></i>
-                        </a>
-                      </li>
-                      <li className="block lg:hidden">
-                        <a
-                          className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30 dark:text-gray-100 dark:hover:bg-zinc-700 ltr:text-left rtl:text-right"
-                          href="#"
-                          data-tw-toggle="modal"
-                          data-tw-target="#audiCallModal"
-                        >
-                          Audio{" "}
-                          <i className="text-gray-500 rtl:float-left ltr:float-right dark:text-gray-300 ri-phone-line text-16"></i>
-                        </a>
-                      </li>
-                      <li className="block lg:hidden">
-                        <a
-                          className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30 dark:text-gray-100 dark:hover:bg-zinc-700 ltr:text-left rtl:text-right"
-                          href="#"
-                          data-tw-toggle="modal"
-                          data-tw-target="#videoCallModal"
-                        >
-                          Video{" "}
-                          <i className="text-gray-500 rtl:float-left ltr:float-right dark:text-gray-300 ri-vidicon-line text-16"></i>
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30 dark:text-gray-100 dark:hover:bg-zinc-700 ltr:text-left rtl:text-right"
-                          href="#"
-                        >
-                          Archive{" "}
-                          <i className="text-gray-500 rtl:float-left ltr:float-right dark:text-gray-300 ri-archive-line text-16"></i>
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30 dark:text-gray-100 dark:hover:bg-zinc-700 ltr:text-left rtl:text-right"
-                          href="#"
-                        >
-                          Muted{" "}
-                          <i className="text-gray-500 rtl:float-left ltr:float-right dark:text-gray-300 ri-volume-mute-line text-16"></i>
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30 dark:text-gray-100 dark:hover:bg-zinc-700 ltr:text-left rtl:text-right"
-                          href="#"
-                        >
-                          Delete{" "}
-                          <i className="text-gray-500 rtl:float-left ltr:float-right dark:text-gray-300 ri-delete-bin-line text-16"></i>
-                        </a>
-                      </li>
-                    </ul>
+                   
                   </div>
                 </li>
               </ul>
