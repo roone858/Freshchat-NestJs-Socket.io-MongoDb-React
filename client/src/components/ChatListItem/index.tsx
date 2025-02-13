@@ -27,7 +27,7 @@ const ChatListItem = ({
               <h5 className="mb-1 text-base truncate dark:text-gray-50">
                 {user.name}
               </h5>
-              <p className="mb-0 text-gray-500 truncate dark:text-gray-300 text-14">
+              <p className="mb-0 text-gray-500 truncate dark:text-gray-400 text-14">
                 {lastMessage ? lastMessage : "no message yet"}
               </p>
             </div>
@@ -36,7 +36,7 @@ const ChatListItem = ({
                 online
               </div>
             ) : (
-              <div className="text-gray-500 text-11 dark:text-gray-300">
+              <div className="text-gray-500 text-11 dark:text-gray-400">
                 offline
               </div>
             )}

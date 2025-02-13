@@ -311,7 +311,8 @@ const Chat = () => {
           </ul>
         </div>
       </div>
-      <div className="flex-2 h-screen overflow-y-auto">
+      <div className="flex-2 h-screen overflow-y-auto bg-[#303841] pt-4">
+        <h5 className="px-5 mb-4 text-16 dark:text-gray-50 font-semibold">Recent</h5>
         <ChatList
           lastMessages={lastMessages}
           me={user}
@@ -338,7 +339,7 @@ const Chat = () => {
                 <li className="px-3">
                   <div className="relative dropstart">
                     <button
-                      className="p-0  text-xl text-gray-500 border-0 btn dropdown-toggle dark:text-gray-300"
+                      className="p-0  text-xl text-gray-500 border-0 btn dropdown-toggle dark:text-gray-400"
                       type="button"
                       data-bs-toggle="dropdown"
                       id="dropdownMenuButton10"
@@ -353,7 +354,7 @@ const Chat = () => {
                       <li className="p-2">
                         <input
                           type="text"
-                          className="text-gray-500 border-0 rounded bg-gray-50 placeholder:text-14 text-14 dark:bg-zinc-600 dark:text-gray-300 placeholder:dark:text-gray-300 focus:ring-0"
+                          className="text-gray-500 border-0 rounded bg-gray-50 placeholder:text-14 text-14 dark:bg-zinc-600 dark:text-gray-400 placeholder:dark:text-gray-400 focus:ring-0"
                           placeholder="Search.."
                         />
                       </li>
@@ -364,7 +365,7 @@ const Chat = () => {
                 <li>
                   <button
                     type="button"
-                    className="hidden text-xl px-3 text-gray-500 border-0 btn dark:text-gray-300 lg:block"
+                    className="hidden text-xl px-3 text-gray-500 border-0 btn dark:text-gray-400 lg:block"
                     data-tw-toggle="modal"
                     data-tw-target="#audiCallModal"
                   >
@@ -389,7 +390,7 @@ const Chat = () => {
                                 <h5 className="mb-1 text-gray-800 truncate dark:text-gray-50">
                                   Doris Brown
                                 </h5>
-                                <p className="text-gray-500 dark:text-gray-300">
+                                <p className="text-gray-500 dark:text-gray-400">
                                   Start Audio Call
                                 </p>
 
@@ -431,7 +432,7 @@ const Chat = () => {
                 <li>
                   <button
                     type="button"
-                    className="hidden text-xl px-3 text-gray-500 border-0 btn dark:text-gray-300 lg:block"
+                    className="hidden text-xl px-3 text-gray-500 border-0 btn dark:text-gray-400 lg:block"
                     data-tw-toggle="modal"
                     data-tw-target="#videoCallModal"
                   >
@@ -441,7 +442,7 @@ const Chat = () => {
 
                 {/* <!-- Modal start --> */}
                 <li
-                  className="relative px-3 z-40 hidden modal dark:text-gray-300"
+                  className="relative px-3 z-40 hidden modal dark:text-gray-400"
                   id="videoCallModal"
                 >
                   <div className="fixed inset-0 z-40 overflow-hidden">
@@ -463,7 +464,7 @@ const Chat = () => {
                                 <h5 className="mb-1 truncate dark:text-gray-50">
                                   Doris Brown
                                 </h5>
-                                <p className="text-gray-500 dark:text-gray-300">
+                                <p className="text-gray-500 dark:text-gray-400">
                                   Start Video Call
                                 </p>
 
@@ -505,7 +506,7 @@ const Chat = () => {
                 <li className="px-3">
                   <a
                     href="#"
-                    className="hidden text-gray-500 dark:text-gray-300 lg:block profileTab"
+                    className="hidden text-gray-500 dark:text-gray-400 lg:block profileTab"
                   >
                     <i className="text-xl ri-group-line"></i>
                   </a>
@@ -513,9 +514,7 @@ const Chat = () => {
 
                 <li className="px-3">
                   <Dropdown button={<i className="ri-more-fill"></i>} />
-                  <div className="relative dropdown">
-                   
-                  </div>
+                  <div className="relative dropdown"></div>
                 </li>
               </ul>
             </div>
@@ -549,7 +548,7 @@ const Chat = () => {
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
                 type="text"
-                className="w-full p-2 rounded bg-gray-50 dark:bg-zinc-700 dark:text-gray-300"
+                className="w-full p-2 rounded bg-gray-50 dark:bg-zinc-700 dark:text-gray-400"
                 placeholder="Enter Message..."
               />
               {showEmojiPicker && (

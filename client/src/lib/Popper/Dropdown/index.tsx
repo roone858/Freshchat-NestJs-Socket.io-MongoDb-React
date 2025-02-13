@@ -28,41 +28,11 @@ const Dropdown = ({ button }: { button: ReactNode }) => {
           ref={menuRef}
           className="absolute z-50"
         >
-          <ul className="  z-50  text-gray-700 w-40 py-2  mt-4 text-left  bg-white border rounded shadow-lg ltr:-right-4 border-gray-50 dropdown-menu top-8 dark:bg-zinc-600 bg-clip-padding dark:border-gray-600/50 rtl:-left-5">
-            <li className="block lg:hidden">
-              <a
-                className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent profileTab dropdown-item whitespace-nowrap hover:bg-gray-100/30 dark:text-gray-100 dark:hover:bg-zinc-800 ltr:text-left rtl:text-right"
-                href="#"
-              >
-                View profile{" "}
-                <i className="text-gray-500 rtl:float-left ltr:float-right dark:text-gray-300 ri-user-2-line text-16"></i>
-              </a>
-            </li>
-            <li className="block lg:hidden">
-              <a
-                className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30 dark:text-gray-100 dark:hover:bg-zinc-800 ltr:text-left rtl:text-right"
-                href="#"
-                data-tw-toggle="modal"
-                data-tw-target="#audiCallModal"
-              >
-                Audio{" "}
-                <i className="text-gray-500 rtl:float-left ltr:float-right dark:text-gray-300 ri-phone-line text-16"></i>
-              </a>
-            </li>
-            <li className="block lg:hidden">
-              <a
-                className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30 dark:text-gray-100 dark:hover:bg-zinc-800 ltr:text-left rtl:text-right"
-                href="#"
-                data-tw-toggle="modal"
-                data-tw-target="#videoCallModal"
-              >
-                Video{" "}
-                <i className="text-gray-500 rtl:float-left ltr:float-right dark:text-gray-300 ri-vidicon-line text-16"></i>
-              </a>
-            </li>
+          <ul className="  z-50  text-gray-800 w-40 py-2  mt-4 text-left  bg-white border rounded shadow-lg ltr:-right-4 border-gray-50 dropdown-menu top-8 dark:bg-zinc-600 bg-clip-padding dark:border-gray-600/50 rtl:-left-5">
+          
             <li>
               <a
-                className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30 dark:text-gray-100 dark:hover:bg-zinc-800 ltr:text-left rtl:text-right"
+                className="block w-full px-4 py-2 text-sm font-normal text-gray-800 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30 dark:text-gray-100 dark:hover:bg-zinc-800 ltr:text-left rtl:text-right"
                 href="#"
               >
                 Archive{" "}
@@ -71,7 +41,7 @@ const Dropdown = ({ button }: { button: ReactNode }) => {
             </li>
             <li>
               <a
-                className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30 dark:text-gray-100 dark:hover:bg-zinc-800 ltr:text-left rtl:text-right"
+                className="block w-full px-4 py-2 text-sm font-normal text-gray-800 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30 dark:text-gray-100 dark:hover:bg-zinc-800 ltr:text-left rtl:text-right"
                 href="#"
               >
                 Muted{" "}
@@ -80,7 +50,7 @@ const Dropdown = ({ button }: { button: ReactNode }) => {
             </li>
             <li>
               <a
-                className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30 dark:text-gray-100 dark:hover:bg-zinc-800 ltr:text-left rtl:text-right"
+                className="block w-full px-4 py-2 text-sm font-normal text-gray-800 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30 dark:text-gray-100 dark:hover:bg-zinc-800 ltr:text-left rtl:text-right"
                 href="#"
               >
                 Delete{" "}
