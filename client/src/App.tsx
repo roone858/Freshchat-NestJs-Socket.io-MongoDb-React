@@ -32,7 +32,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <Navbar isLogin={!accessToken ? false : true} />
+        {/* <Navbar isLogin={!accessToken ? false : true} /> */}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/chat/:username" element={<Chat />} />
