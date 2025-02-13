@@ -30,7 +30,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     console.log(`Client disconnected: ${client.id}`);
 
     // Remove the socketId from the user record in the database
-    await this.userService.updateUserSocket(client.id, null);
+    await this.userService.updateUserSocketAndLastSeen(client.id, null);
   }
 
   @SubscribeMessage('setUsername')

@@ -73,6 +73,9 @@ export class User {
   @Prop({ type: String, default: null }) // Explicitly set type to String
   socketId: string | null;
 
+  @Prop({ type: Date, default: null }) // Expiry time (optional)
+  lastSeen?: Date;
+
   isPasswordCorrect: (password: string) => Promise<boolean>;
 }
 

@@ -119,10 +119,26 @@ export class UsersService {
           { socketId: usernameOrSocketId },
         ],
       },
-      { socketId },
+      { socketId: socketId },
       { new: true },
     );
   }
+  async updateUserSocketAndLastSeen(
+    usernameOrSocketId: string,
+    socketId: string | null,
+  ): Promise<void> {
+    await this.userModel.findOneAndUpdate(
+      {
+        $or: [
+          { username: usernameOrSocketId },
+          { socketId: usernameOrSocketId },
+        ],
+      },
+      { socketId: socketId, lastSeen: new Date() },
+      { new: true },
+    );
+  }
+
   remove(id: number) {
     return `This action removes a #${id} user`;
   }
