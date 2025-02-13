@@ -67,6 +67,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     if (receiver?.socketId) {
       this.server.to(receiver.socketId).emit('receivePrivateMessage', {
+        receiver: data.receiver,
         sender: data.sender,
         message: data.message,
         timeSent: new Date().toLocaleString('en-US'),
@@ -105,6 +106,9 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       }),
     );
 
-    client.emit('lastMessages', lastMessages);
+    client.emit(
+      'lastMessages',
+      lastMessages.filter((msg) => msg !== null),
+    );
   }
 }

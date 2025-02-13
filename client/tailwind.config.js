@@ -1,9 +1,21 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  darkMode: "class",
   theme: {
     extend: {
       colors: {
+        gray: {
+          500: "#303841",
+        },
+        zinc: {
+          600: "#36404A",
+
+          800: "#262E35",
+        },
+        violet: {
+          500: "#7269EF", // New color for bg-violet-500
+        },
         primary: {
           50: "#eff6ff",
           100: "#dbeafe",

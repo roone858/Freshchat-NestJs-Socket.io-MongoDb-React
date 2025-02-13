@@ -9,7 +9,7 @@ const Message = ({
 }: {
   me?: boolean;
   showAvatar: boolean;
-  user: User;
+  user: User | null;
   message: MessageType;
 }) => {
   return (
@@ -18,7 +18,7 @@ const Message = ({
         <div className="ltr:mr-4 rtl:ml-4">
           {showAvatar ? (
             <img
-              src={"../../src/assets" + user.image}
+              src={"../../src/assets" + user?.image}
               alt=""
               className="rounded-full h-9 w-9"
             />
@@ -30,7 +30,7 @@ const Message = ({
         <div>
           {showAvatar && (
             <div className="font-medium text-[14px] ltr:text-left rtl:text-right my-2  text-[#a7a9b6] dark:text-gray-300">
-              {user.name}
+              {user?.name}
             </div>
           )}
           <div className="flex gap-2 mb-1">

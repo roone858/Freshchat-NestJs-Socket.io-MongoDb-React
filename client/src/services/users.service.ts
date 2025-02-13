@@ -8,6 +8,7 @@ const usersService = {
     try {
       setTokenInAxios(sessionStorage.getItem("accessToken") || "");
       const response = await axios.get(`${API_BASE_URL}/users`);
+      console.log("fetch users from api")
       return response.data;
     } catch (error) {
       console.error("Error fetching messages:", error);

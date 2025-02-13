@@ -2,7 +2,7 @@ import ServiceCard from "../../components/ServiceCard/ServiceCard";
 import { ChatIcon, ErrorIcon, FeatureIcon } from "../../icons";
 const Home = () => {
   return (
-    <div className="min-h-screen bg-gray-900 flex flex-col justify-center items-center pt-20">
+    <div className="min-h-screen dark:bg-[#262E35] flex flex-col justify-center items-center pt-20">
       <div className=" flex  flex-wrap justify-center items-center ">
         <div className="sm:col-span-12 md:col-span-6 lg:col-span-4 p-6 md:p-6 lg:p-12">
           <ServiceCard

@@ -38,7 +38,7 @@ export class ChatService {
         ],
       })
       .sort({ timeSent: -1 }) // ترتيب تنازلي للحصول على آخر رسالة
-      .select('message sender receiver createdAt')
+      .select('message sender receiver timeSent')
       .lean();
   }
 }

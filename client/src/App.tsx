@@ -1,5 +1,6 @@
 import Login from "./pages/Login";
 import "./App.css";
+import "remixicon/fonts/remixicon.css";
 import Navbar from "./layouts/Navbar/Navbar";
 import Chat from "./pages/Chat";
 import Home from "./pages/Home";
