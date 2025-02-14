@@ -11,7 +11,7 @@ const NewMessageForm = ({
   setLastMessages,
   scrollToBottom,
 }: {
-  friend: User;
+  friend: User | null;
   user: User | null;
   socketRef: MutableRefObject<Socket | null>; 
   setMessages: (updater: (prevMessages: MessageType[]) => MessageType[]) => void; 
