@@ -1,10 +1,10 @@
 import Dropdown from "../../lib/Popper/Dropdown";
 import { User } from "../../types/types";
-import logo from "../../assets/logo.svg"
+import logo from "../../assets/logo.svg";
 
-const Sidebar = ({ user }: { user: User |null }) => {
+const Sidebar = ({ user }: { user: User | null }) => {
   return (
-    <div className="sidebar-menu w-full lg:w-[75px] shadow lg:flex lg:flex-col flex flex-row justify-between items-center fixed lg:relative z-40 bottom-0 bg-white dark:bg-zinc-600 ">
+    <div className="sidebar-menu w-full  lg:w-[75px] shadow hidden lg:flex lg:flex-col  flex-row justify-between items-center fixed lg:relative z-40 bottom-0 bg-white dark:bg-zinc-600 ">
       <div className=" lg:my-5 lg:block">
         <a href="index.html" className="block dark:hidden">
           <span>

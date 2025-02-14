@@ -7,6 +7,7 @@ import { ChatIcon } from "../../icons";
 import ChatHeader from "../../components/ChatHeader";
 import MessagesContainer from "../../components/MessagesContainer";
 import usersService from "../../services/users.service";
+import Sidebar from "../../components/Sidebar";
 const Chat = () => {
   const socketRef = useRef<Socket | null>(null);
   const [users, setUsers] = useState<User[]>([]);
@@ -76,7 +77,8 @@ const Chat = () => {
 
   return (
     <div className="flex flex-row lg:flex h-screen relative">
-      {/* <Sidebar user={user} /> */}
+        <Sidebar user={user} />
+
       <div className="flex-2  overflow-y-auto bg-[#303841] pt-4">
         <h5 className="px-5 mb-4 text-16 dark:text-gray-50 font-semibold">
           Recent
