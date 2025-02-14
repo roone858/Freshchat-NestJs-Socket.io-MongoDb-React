@@ -1,6 +1,7 @@
 import React, { FormEvent, useState } from "react";
 import { login } from "../../services/auth.service";
 import { setTokenInAxios } from "../../utils/axios";
+import logo from "../../assets/logo.svg";
 import { Link } from "react-router-dom";
 
 export default function Login() {
@@ -31,8 +32,141 @@ export default function Login() {
     }
   };
   return (
-    <>
-      <section className="bg-gray-50 dark:bg-gray-900">
+    <div>
+      <div className="px-5 py-18 min-h-screen  sm:px-24 lg:px-0">
+        <div className="grid items-center justify-center grid-cols-1 lg:grid-cols-12 auth-bg">
+          <div className="mx-5 lg:mx-20 lg:col-start-5 lg:col-span-4">
+            <div className="text-center">
+              <div className="block mb-3">
+                <img
+                  src={logo}
+                  alt=""
+                  className=" h-8 my-auto mt-10 mx-auto block "
+                />
+              </div>
+
+              <h4 className="mb-2 text-gray-800 text-21 dark:text-gray-50">
+                Sign in
+              </h4>
+              <p className="mb-6 text-gray-500 dark:text-gray-300">
+                Sign in to continue to Chatvia.
+              </p>
+            </div>
+            <div className="bg-white card dark:bg-zinc-800 dark:border-transparent">
+              <div className="p-5">
+                <div className="p-4">
+                  <form action="#" onSubmit={handleSubmit}>
+                    <div className="mb-5">
+                      <label className="font-medium text-gray-700 dark:text-gray-100">
+                        Username
+                      </label>
+                      <div className="flex items-center mt-2 mb-3 rounded-3 bg-slate-50/50 dark:bg-transparent">
+                        <span
+                          className="flex items-center px-4 py-2 text-gray-300 border border-r-0 border-gray-100 rounded rounded-r-none dark:border-zinc-600"
+                          id="basic-addon3"
+                        >
+                          <i className="ri-user-2-line text-16"></i>
+                        </span>
+                        <input
+                          type="username"
+                          name="username"
+                          onChange={handleInputChange}
+                          id="username"
+                          className="w-full px-2 py-2 border-gray-100 border outline-none bg-transparent rounded rounded-l-none placeholder:text-14  text-14 focus:ring-0 dark:bg-zinc-700 dark:border-zinc-600 dark:text-gray-200"
+                          placeholder="Enter Username"
+                          aria-label="Enter Username"
+                          aria-describedby="basic-addon3"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mb-6">
+                      <div className="float-right mt-1">
+                        <Link to={"forget"}>
+                          <p className="text-gray-300 text-xs ">
+                            Forgot password?
+                          </p>
+                        </Link>
+                      </div>
+                      <label className="font-medium text-gray-700 dark:text-gray-200">
+                        Password
+                      </label>
+                      <div className="flex items-center mt-2 mb-3 rounded-3 bg-slate-50/50 dark:bg-transparent">
+                        <span
+                          className="flex items-center px-4 py-2 text-gray-300 border border-r-0 border-gray-100 rounded rounded-r-none dark:border-zinc-600"
+                          id="basic-addon4"
+                        >
+                          <i className="ri-lock-2-line text-16"></i>
+                        </span>
+                        <input
+                          type="password"
+                          name="password"
+                          onChange={handleInputChange}
+                          className="w-full px-2 py-2 border-gray-100 border outline-none bg-transparent rounded rounded-l-none placeholder:text-14  text-14 focus:ring-0 dark:bg-zinc-700 dark:border-zinc-600 dark:text-gray-200"
+                          placeholder="Enter Password"
+                          aria-label="Enter Password"
+                          aria-describedby="basic-addon4"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex items-center mb-6">
+                      <input
+                        type="checkbox"
+                        className="border-gray-100 rounded focus:ring-1 checked:ring-1 focus:ring-offset-0 focus:outline-0 checked:bg-violet-500 dark:bg-zinc-600 dark:border-zinc-600 dark:checked:bg-violet-500 "
+                        id="memberCheck1"
+                      />
+                      <label
+                        className="font-medium px-2 text-gray-700 ltr:ml-2 rtl:mr-2 dark:text-gray-200"
+                        htmlFor="remember-check"
+                      >
+                        Remember me
+                      </label>
+                    </div>
+                    {err && (
+                      <div
+                        className="bg-red-100 mb-5 border border-red-400 text-red-700 px-2 py-1 rounded relative"
+                        role="alert"
+                      >
+                        <span className="block text-[11px] sm:inline">
+                          username or password is incorrect !
+                        </span>
+                      </div>
+                    )}
+                    <div className="grid">
+                      <button
+                        className="py-2 text-white border-transparent btn bg-violet-500 hover:bg-violet-600 text-16"
+                        type="submit"
+                      >
+                        Sign in
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-10 text-center">
+              <p className="mb-5 text-gray-700 dark:text-gray-200">
+                Don't have an account ?{" "}
+                <a
+                  href="auth-register.html"
+                  className="fw-medium text-violet-500"
+                >
+                  {" "}
+                  Signup now{" "}
+                </a>{" "}
+              </p>
+              <p className="text-gray-700 dark:text-gray-200">
+                ©{new Date().getFullYear()}2025 Chatvia. Crafted with{" "}
+                <i className="text-red-500 mdi mdi-heart"></i> by Themesbrand
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* <section className="bg-gray-50 dark:bg-gray-900">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
           <a
             href="#"
@@ -129,7 +263,7 @@ export default function Login() {
             </div>
           </div>
         </div>
-      </section>
-    </>
+      </section> */}
+    </div>
   );
 }
