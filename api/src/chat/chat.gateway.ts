@@ -43,6 +43,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     if (user) {
       // Update the socket ID if the user already exists
       await this.userService.updateUserSocket(user.username, client.id);
+      // Emit event to notify others that this user is online
+      client.broadcast.emit('userOnline', {
+        username: user.username,
+        socketId: client.id,
+      });
     } else {
       throw new NotFoundException('user not found');
       // Create a new user record if they don’t exist

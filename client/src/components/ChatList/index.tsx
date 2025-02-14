@@ -1,6 +1,5 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import ChatListItem from "../ChatListItem";
-import usersService from "../../services/users.service";
 import { MessageType, User } from "../../types/types";
 import React from "react";
 
@@ -10,27 +9,14 @@ const ChatList = ({
   me,
   lastMessages,
   setFriend,
+  users,
 }: {
+  users: User[];
   lastMessages: MessageType[];
   me: User | null;
   setFriend: (user: User) => void;
 }) => {
-  const [users, setUsers] = useState<User[]>([]);
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const res = await usersService.getUsers();
-        if (res) {
-          setUsers(res);
-        }
-      } catch (error) {
-        console.error("Failed to fetch users:", error);
-      }
-    };
-
-    fetchUsers();
-  }, []); // ✅ Run once when the component mounts
+  useEffect(() => {}, []); // ✅ Run once when the component mounts
 
   const sortedUsers = useMemo(() => {
     return [...users].sort((a, b) => {
