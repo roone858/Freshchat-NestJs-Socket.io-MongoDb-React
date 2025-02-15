@@ -2,43 +2,21 @@ import Login from "./pages/Login";
 import "./App.css";
 import "remixicon/fonts/remixicon.css";
 import Chat from "./pages/Chat";
-import Home from "./pages/Home";
 import Forget from "./pages/Forget";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import withAuth from "./HOC/WithAuth";
+const ProtectedChat = withAuth(Chat); // Wrap Chat with authentication
 
 function App() {
-  const accessToken = sessionStorage.getItem("accessToken");
-  // useEffect(() => {
-  //   const gottenAccessToken = sessionStorage.getItem("accessToken");
-  //   if (gottenAccessToken) {
-  //     window.location.href = "/";
-  //   }
-  // }, [accessToken]);
 
-  if (!accessToken) {
     return (
-      <>
-        <BrowserRouter>
-          {/* <Navbar isLogin={!accessToken ? false : true} /> */}
-          <Routes>
-            <Route path="/" element={<Login />} />{" "}
-            <Route path="/forget" element={<Forget />} />{" "}
-          </Routes>
-        </BrowserRouter>
-      </>
-    );
-  }
-  return (
-    <>
       <BrowserRouter>
-        {/* <Navbar isLogin={!accessToken ? false : true} /> */}
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/chat/:username" element={<Chat />} />
-          <Route path="/chat" element={<Chat />} />
-        </Routes>
-      </BrowserRouter>
-    </>
+      <Routes>
+        <Route path="/" element={<ProtectedChat />} /> {/* Protected Route */}
+        <Route path="/login" element={ < Login />} />
+        <Route path="/forget" element={<Forget />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

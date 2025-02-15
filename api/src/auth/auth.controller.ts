@@ -1,6 +1,15 @@
-import { Controller, Post, UseGuards, Request, Body } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  UseGuards,
+  Request,
+  Body,
+  Get,
+  Req,
+} from '@nestjs/common';
 import { LocalAuthGuard } from './local-auth.guard';
 import { AuthService } from './auth.service';
+import { JwtAuthGuard } from './jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -22,5 +31,11 @@ export class AuthController {
   @Post('reset-password')
   resetPassword(@Body() data: any) {
     return this.authService.resetPassword(data);
+  }
+
+  @Get('validate')
+  @UseGuards(JwtAuthGuard) // Protect this route
+  validateToken(@Req() req: any) {
+    return req.user._doc; // Contains the decoded JWT payload
   }
 }

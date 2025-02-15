@@ -1,15 +1,24 @@
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import { login } from "../../services/auth.service";
 import { setTokenInAxios } from "../../utils/axios";
 import logo from "../../assets/logo.svg";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+  const navigate = useNavigate();
+
   const [data, setData] = useState<{
     username: string;
     password: string;
   }>({ username: "", password: "" });
   const [err, setErr] = useState(false);
+  useEffect(() => {
+    const token = sessionStorage.getItem("accessToken");
+    if (token) {
+      navigate("/"); // Redirect to chat if already logged in
+    }
+  }, [navigate]);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
@@ -34,8 +43,8 @@ export default function Login() {
   return (
     <div>
       <div className="px-5 py-18 min-h-screen  sm:px-24 lg:px-0">
-        <div className="grid items-center justify-center grid-cols-1 lg:grid-cols-12 auth-bg">
-          <div className="mx-5 lg:mx-20 lg:col-start-5 lg:col-span-4">
+        <div className="container grid  grid-cols-12 place-items-center justify-center ">
+          <div className="col-start-4 mx-auto col-span-6 ">
             <div className="text-center">
               <div className="block mb-3">
                 <img
@@ -49,7 +58,7 @@ export default function Login() {
                 Sign in
               </h4>
               <p className="mb-6 text-gray-500 dark:text-gray-300">
-                Sign in to continue to Chatvia.
+                Sign in to continue to FreshChat.
               </p>
             </div>
             <div className="bg-white card dark:bg-zinc-800 dark:border-transparent">
@@ -125,12 +134,23 @@ export default function Login() {
                     </div>
                     {err && (
                       <div
-                        className="bg-red-100 mb-5 border border-red-400 text-red-700 px-2 py-1 rounded relative"
+                        className="flex items-center p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
                         role="alert"
                       >
-                        <span className="block text-[11px] sm:inline">
-                          username or password is incorrect !
-                        </span>
+                        <svg
+                          className="shrink-0 inline w-4 h-4 me-3"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                        </svg>
+                        <span className="sr-only">Info</span>
+                        <div>
+                          <span className="font-medium">!</span> Username or
+                          Password is invalid.
+                        </div>
                       </div>
                     )}
                     <div className="grid">
@@ -158,8 +178,8 @@ export default function Login() {
                 </a>{" "}
               </p>
               <p className="text-gray-700 dark:text-gray-200">
-                ©{new Date().getFullYear()}2025 Chatvia. Crafted with{" "}
-                <i className="text-red-500 mdi mdi-heart"></i> by Themesbrand
+                ©{new Date().getFullYear()} FreshChat. Crafted with{" "}
+                <i className="text-red-500 mdi mdi-heart"></i> by Mahmoud Gamal
               </p>
             </div>
           </div>

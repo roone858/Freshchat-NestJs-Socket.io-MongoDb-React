@@ -2,6 +2,7 @@ import {
   Injectable,
   InternalServerErrorException,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
@@ -18,6 +19,17 @@ export class AuthService {
     private readonly mailService: MailService,
   ) {}
 
+  async validateToken(token: string): Promise<any> {
+    try {
+      const decoded = this.jwtService.verify(token, {
+        secret: process.env.JWT_SECRET, // Ensure you have this in .env
+      });
+
+      return decoded; // Return decoded payload (user data)
+    } catch (error) {
+      throw new UnauthorizedException('Invalid or expired token');
+    }
+  }
   async validateUser(username: string, password: string): Promise<any> {
     const user = await this.userModel.findOne({ username });
     const isPasswordCorrect = user && (await user.isPasswordCorrect(password));
