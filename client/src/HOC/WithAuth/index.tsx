@@ -9,36 +9,31 @@ const withAuth = <P extends object>(WrappedComponent: ComponentType<P>) => {
 
     useEffect(() => {
       const validateToken = async () => {
-        const accessToken = sessionStorage.getItem("accessToken"); // Consider using localStorage if needed
+        const accessToken = sessionStorage.getItem("accessToken");
 
         if (!accessToken) {
-          setIsAuthenticated(false);
-          return;
+          return handleUnauthorized();
         }
 
         try {
-          console.log(accessToken)
-          const response = await axios.get("http://localhost:3001/auth/validate", {
+          const { status } = await axios.get("http://localhost:3001/auth/validate", {
             headers: { Authorization: `Bearer ${accessToken}` },
           });
-          console.log(response)
 
-          setIsAuthenticated(response.status === 200);
+          setIsAuthenticated(status === 200);
         } catch (error) {
           console.error("Token validation failed:", error);
-          navigate("/login");
-          setIsAuthenticated(false);
+          handleUnauthorized();
         }
       };
 
-      validateToken();
-    }, []);
+      const handleUnauthorized = () => {
+        setIsAuthenticated(false);
+        navigate("/login");
+      };
 
-    useEffect(() => {
-      if (isAuthenticated === false) {
-        navigate("/login"); // Redirect to login if not authenticated
-      }
-    }, [isAuthenticated, navigate]);
+      validateToken();
+    }, [navigate]);
 
     if (isAuthenticated === null) {
       return <div style={{ textAlign: "center", marginTop: "20px" }}>🔄 Verifying...</div>;

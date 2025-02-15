@@ -91,11 +91,11 @@ export default function Login() {
 
                     <div className="mb-6">
                       <div className="float-right mt-1">
-                        <Link to={"forget"}>
+                        <div className="hover:cursor-pointer" onClick={() => navigate("/forget")}>
                           <p className="text-gray-300 text-xs ">
                             Forgot password?
                           </p>
-                        </Link>
+                        </div>
                       </div>
                       <label className="font-medium text-gray-700 dark:text-gray-200">
                         Password
