@@ -60,15 +60,44 @@ const Chat = () => {
           )
         );
       };
-
+      const handleUserOffline = (offlineUser: string) => {
+        setUsers((prevUsers) =>
+          prevUsers.map((user) =>
+            user.username === offlineUser
+              ? { ...user, socketId: null, lastSeen: new Date() }
+              : user
+          )
+        );
+      };
+      const handleReceiveNewMessage = (message: MessageType) => {
+        setLastMessages((prevMessages) => {
+          const updatedMessages = [...prevMessages];
+          const index = updatedMessages.findIndex(
+            (msg) =>
+              (msg.sender === message.sender && msg.receiver === message.receiver) ||
+              (msg.sender === message.receiver && msg.receiver === message.sender)
+          );
+  
+          if (index !== -1) {
+            updatedMessages[index] = message; // Update existing chat entry
+          } else {
+            updatedMessages.unshift(message); // Add new chat to the top
+          }
+  
+          return updatedMessages;
+        });
+      };
       socketRef.current.emit("setUsername", currentUser.username);
       socketRef.current.on("userOnline", handleUserOnline);
+      socketRef.current.on("userOffline", handleUserOffline);
+      socketRef.current.on("receivePrivateMessage", handleReceiveNewMessage); 
       socketRef.current?.emit("getLastMessages", currentUser.username);
       socketRef.current?.on("lastMessages", handleLastMessages);
     }
 
     return () => {
       socketRef.current?.off("userOnline");
+      socketRef.current?.off("userOffline");
       socketRef.current?.off("lastMessages");
       socketRef.current?.disconnect();
       socketRef.current = null;
@@ -77,7 +106,7 @@ const Chat = () => {
 
   return (
     <div className="flex flex-row lg:flex h-screen relative">
-        <Sidebar user={user} />
+      <Sidebar user={user} />
 
       <div className="flex-2  overflow-y-auto bg-[#303841] pt-4">
         <h5 className="px-5 mb-4 text-16 dark:text-gray-50 font-semibold">

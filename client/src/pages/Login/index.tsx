@@ -2,8 +2,8 @@ import React, { FormEvent, useEffect, useState } from "react";
 import { login } from "../../services/auth.service";
 import { setTokenInAxios } from "../../utils/axios";
 import logo from "../../assets/logo.svg";
-import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import InputField from "../../components/InputField";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -65,58 +65,35 @@ export default function Login() {
               <div className="p-5">
                 <div className="p-4">
                   <form action="#" onSubmit={handleSubmit}>
-                    <div className="mb-5">
-                      <label className="font-medium text-gray-700 dark:text-gray-100">
-                        Username
-                      </label>
-                      <div className="flex items-center mt-2 mb-3 rounded-3 bg-slate-50/50 dark:bg-transparent">
-                        <span
-                          className="flex items-center px-4 py-2 text-gray-300 border border-r-0 border-gray-100 rounded rounded-r-none dark:border-zinc-600"
-                          id="basic-addon3"
-                        >
-                          <i className="ri-user-2-line text-16"></i>
-                        </span>
-                        <input
-                          type="username"
-                          name="username"
-                          onChange={handleInputChange}
-                          id="username"
-                          className="w-full px-2 py-2 border-gray-100 border outline-none bg-transparent rounded rounded-l-none placeholder:text-14  text-14 focus:ring-0 dark:bg-zinc-700 dark:border-zinc-600 dark:text-gray-200"
-                          placeholder="Enter Username"
-                          aria-label="Enter Username"
-                          aria-describedby="basic-addon3"
-                        />
-                      </div>
-                    </div>
+                    <InputField
+                      name="username"
+                      value={data.username}
+                      label="  Username"
+                      icon="ri-user-2-line"
+                      onChange={handleInputChange}
+                      placeholder="Enter Username"
+                    />
 
                     <div className="mb-6">
                       <div className="float-right mt-1">
-                        <div className="hover:cursor-pointer" onClick={() => navigate("/forget")}>
+                        <div
+                          className="hover:cursor-pointer"
+                          onClick={() => navigate("/forget")}
+                        >
                           <p className="text-gray-300 text-xs ">
                             Forgot password?
                           </p>
                         </div>
                       </div>
-                      <label className="font-medium text-gray-700 dark:text-gray-200">
-                        Password
-                      </label>
-                      <div className="flex items-center mt-2 mb-3 rounded-3 bg-slate-50/50 dark:bg-transparent">
-                        <span
-                          className="flex items-center px-4 py-2 text-gray-300 border border-r-0 border-gray-100 rounded rounded-r-none dark:border-zinc-600"
-                          id="basic-addon4"
-                        >
-                          <i className="ri-lock-2-line text-16"></i>
-                        </span>
-                        <input
-                          type="password"
-                          name="password"
-                          onChange={handleInputChange}
-                          className="w-full px-2 py-2 border-gray-100 border outline-none bg-transparent rounded rounded-l-none placeholder:text-14  text-14 focus:ring-0 dark:bg-zinc-700 dark:border-zinc-600 dark:text-gray-200"
-                          placeholder="Enter Password"
-                          aria-label="Enter Password"
-                          aria-describedby="basic-addon4"
-                        />
-                      </div>
+                      <InputField
+                        name="password"
+                        value={data.password}
+                        label="Password"
+                        icon="ri-lock-2-line"
+                        onChange={handleInputChange}
+                        placeholder="Enter Password"
+                      />
+                    
                     </div>
 
                     <div className="flex items-center mb-6">
@@ -169,10 +146,7 @@ export default function Login() {
             <div className="mt-10 text-center">
               <p className="mb-5 text-gray-700 dark:text-gray-200">
                 Don't have an account ?{" "}
-                <a
-                  href="auth-register.html"
-                  className="fw-medium text-violet-500"
-                >
+                <a href="auth-register" className="fw-medium text-violet-500">
                   {" "}
                   Signup now{" "}
                 </a>{" "}

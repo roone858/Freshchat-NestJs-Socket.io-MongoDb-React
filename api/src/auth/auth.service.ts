@@ -19,28 +19,6 @@ export class AuthService {
     private readonly mailService: MailService,
   ) {}
 
-  async validateToken(token: string): Promise<any> {
-    try {
-      const decoded = this.jwtService.verify(token, {
-        secret: process.env.JWT_SECRET, // Ensure you have this in .env
-      });
-
-      return decoded; // Return decoded payload (user data)
-    } catch (error) {
-      throw new UnauthorizedException('Invalid or expired token');
-    }
-  }
-  async validateUser(username: string, password: string): Promise<any> {
-    const user = await this.userModel.findOne({ username });
-    const isPasswordCorrect = user && (await user.isPasswordCorrect(password));
-    if (isPasswordCorrect) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, ...result } = JSON.parse(JSON.stringify(user));
-      return result;
-    }
-    return null;
-  }
-
   async login(user: UserDocument) {
     const payload = {
       sub: user._id,
@@ -52,6 +30,54 @@ export class AuthService {
       user: user,
     };
   }
+  async register(userData: {
+    email: string;
+    password: string;
+    username: string;
+    name: string;
+  }) {
+    try {
+      // Check if the user already exists
+      const existingUser = await this.userModel.findOne({
+        email: userData.email,
+      });
+      if (existingUser) {
+        throw new NotFoundException(
+          `User with Email ${userData.email} already exists.`,
+        );
+      }
+
+      // Hash the password
+      const passwordHash = await CryptoService.hash(userData.password);
+
+      // Create new user
+      const newUser = new this.userModel({
+        name: userData.name,
+        email: userData.email,
+        username: userData.username,
+        password: passwordHash,
+      });
+
+      // Save to the database
+      await newUser.save();
+
+      // Generate a token for the new user
+      const token = this.jwtService.sign({
+        sub: newUser._id,
+        email: newUser.email,
+      });
+
+      return {
+        message: 'User registered successfully',
+        user: { email: newUser.email, username: newUser.username },
+        access_token: token,
+      };
+    } catch (error) {
+      console.error('Error in register:', error);
+      throw new InternalServerErrorException('Failed to register user.');
+    }
+  }
+
   async forgotPassword(email: string) {
     try {
       // 1. Find user by email
@@ -144,5 +170,26 @@ export class AuthService {
       message: 'Password updated successfully',
       modifiedCount: result.modifiedCount,
     };
+  }
+  async validateToken(token: string): Promise<any> {
+    try {
+      const decoded = this.jwtService.verify(token, {
+        secret: process.env.JWT_SECRET, // Ensure you have this in .env
+      });
+
+      return decoded; // Return decoded payload (user data)
+    } catch (error) {
+      throw new UnauthorizedException('Invalid or expired token');
+    }
+  }
+  async validateUser(username: string, password: string): Promise<any> {
+    const user = await this.userModel.findOne({ username });
+    const isPasswordCorrect = user && (await user.isPasswordCorrect(password));
+    if (isPasswordCorrect) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, ...result } = JSON.parse(JSON.stringify(user));
+      return result;
+    }
+    return null;
   }
 }

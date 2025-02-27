@@ -5,15 +5,16 @@ import Chat from "./pages/Chat";
 import Forget from "./pages/Forget";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import withAuth from "./HOC/WithAuth";
+import Register from "./pages/Register";
 const ProtectedChat = withAuth(Chat); // Wrap Chat with authentication
 
 function App() {
-
-    return (
-      <BrowserRouter>
+  return (
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<ProtectedChat />} /> {/* Protected Route */}
-        <Route path="/login" element={ < Login />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/auth-register" element={<Register />} />
         <Route path="/forget" element={<Forget />} />
       </Routes>
     </BrowserRouter>

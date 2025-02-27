@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import ChatListItem from "../ChatListItem";
 import { MessageType, User } from "../../types/types";
 import React from "react";
@@ -16,8 +16,6 @@ const ChatList = ({
   me: User | null;
   setFriend: (user: User) => void;
 }) => {
-  useEffect(() => {}, []); // ✅ Run once when the component mounts
-
   const sortedUsers = useMemo(() => {
     return [...users].sort((a, b) => {
       const lastMsgA = lastMessages.find(
@@ -30,9 +28,9 @@ const ChatList = ({
       const timeA = lastMsgA ? new Date(lastMsgA.timeSent).getTime() : 0;
       const timeB = lastMsgB ? new Date(lastMsgB.timeSent).getTime() : 0;
 
-      return timeB - timeA; // ✅ Sort descending
+      return timeB - timeA;
     });
-  }, [users, lastMessages]); // ✅ Only recalculate when `users` or `lastMessages` change
+  }, [users, lastMessages]);
 
   const getLastMessage = (user: User) => {
     if (!Array.isArray(lastMessages)) return "no messages yet";

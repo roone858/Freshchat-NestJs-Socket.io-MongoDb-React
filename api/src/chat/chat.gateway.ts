@@ -10,75 +10,87 @@ import {
 import { Server, Socket } from 'socket.io';
 import { ChatService } from './chat.service';
 import { UsersService } from 'src/users/users.service';
-import { NotFoundException } from '@nestjs/common';
+import { NotFoundException, Logger } from '@nestjs/common';
 
 @WebSocketGateway({ cors: { origin: '*' } })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;
 
+  private readonly logger = new Logger(ChatGateway.name);
+
   constructor(
     private readonly chatService: ChatService,
-    private readonly userService: UsersService, // Inject user service
+    private readonly userService: UsersService,
   ) {}
 
-  async handleConnection(client: Socket) {
-    console.log(`Client connected: ${client.id}`);
+  async handleConnection(client: Socket): Promise<void> {
+    this.logger.log(`Client connected: ${client.id}`);
   }
 
-  async handleDisconnect(client: Socket) {
-    console.log(`Client disconnected: ${client.id}`);
+  async handleDisconnect(client: Socket): Promise<void> {
+    this.logger.log(`Client disconnected: ${client.id}`);
 
-    // Remove the socketId from the user record in the database
-    await this.userService.updateUserSocketAndLastSeen(client.id, null);
+    try {
+      const user = await this.userService.findUserBySocketId(client.id);
+      if (!user) return;
+
+      await this.userService.updateUserSocketAndLastSeen(client.id, null);
+      this.server.emit('userOffline', user.username);
+    } catch (error) {
+      this.logger.error('Error handling disconnect:', error);
+    }
   }
 
   @SubscribeMessage('setUsername')
   async handleSetUsername(
     @MessageBody() username: string,
     @ConnectedSocket() client: Socket,
-  ) {
-    const user = await this.userService.findByUsername(username);
+  ): Promise<void> {
+    try {
+      const user = await this.userService.findByUsername(username);
+      if (!user) throw new NotFoundException('User not found');
 
-    if (user) {
-      // Update the socket ID if the user already exists
       await this.userService.updateUserSocket(user.username, client.id);
-      // Emit event to notify others that this user is online
+
       client.broadcast.emit('userOnline', {
         username: user.username,
         socketId: client.id,
       });
-    } else {
-      throw new NotFoundException('user not found');
-      // Create a new user record if they don’t exist
-      // await this.userService.createUser(username, client.id);
-    }
 
-    console.log(`Client ${username} connected with Socket ID: ${client.id}`);
+      this.logger.log(
+        `Client ${username} connected with Socket ID: ${client.id}`,
+      );
+    } catch (error) {
+      this.logger.error(`Error in handleSetUsername: ${error.message}`);
+      client.emit('error', { message: error.message });
+    }
   }
 
   @SubscribeMessage('sendPrivateMessage')
   async handlePrivateMessage(
     @MessageBody() data: { sender: string; receiver: string; message: string },
-  ) {
-    const receiver = await this.userService.findByUsername(data.receiver);
+  ): Promise<void> {
+    try {
+      const receiver = await this.userService.findByUsername(data.receiver);
+      await this.chatService.saveMessage(
+        data.sender,
+        data.receiver,
+        data.message,
+      );
 
-    // Save the message in the database
-    await this.chatService.saveMessage(
-      data.sender,
-      data.receiver,
-      data.message,
-    );
-
-    if (receiver?.socketId) {
-      this.server.to(receiver.socketId).emit('receivePrivateMessage', {
-        receiver: data.receiver,
-        sender: data.sender,
-        message: data.message,
-        timeSent: new Date().toLocaleString('en-US'),
-      });
-    } else {
-      console.log(`Client ${data.receiver} is not connected`);
+      if (receiver?.socketId) {
+        this.server.to(receiver.socketId).emit('receivePrivateMessage', {
+          receiver: data.receiver,
+          sender: data.sender,
+          message: data.message,
+          timeSent: new Date().toISOString(),
+        });
+      } else {
+        this.logger.warn(`Client ${data.receiver} is offline`);
+      }
+    } catch (error) {
+      this.logger.error(`Error sending private message: ${error.message}`);
     }
   }
 
@@ -86,34 +98,37 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   async handleGetChatHistory(
     @MessageBody() data: { sender: string; receiver: string },
     @ConnectedSocket() client: Socket,
-  ) {
-    const messages = await this.chatService.getMessages(
-      data.sender,
-      data.receiver,
-    );
-    client.emit('chatHistory', messages);
+  ): Promise<void> {
+    try {
+      const messages = await this.chatService.getMessages(
+        data.sender,
+        data.receiver,
+      );
+      client.emit('chatHistory', messages);
+    } catch (error) {
+      this.logger.error(`Error fetching chat history: ${error.message}`);
+    }
   }
 
   @SubscribeMessage('getLastMessages')
   async handleGetLastMessages(
     @MessageBody() username: string,
     @ConnectedSocket() client: Socket,
-  ) {
-    const users = await this.userService.getAllUsersExcept(username); // إحضار جميع المستخدمين باستثناء المستخدم الحالي
+  ): Promise<void> {
+    try {
+      const users = await this.userService.getAllUsersExcept(username);
+      const lastMessages = await Promise.all(
+        users.map((user) =>
+          this.chatService.getLastMessage(username, user.username),
+        ),
+      );
 
-    const lastMessages = await Promise.all(
-      users.map(async (user) => {
-        const lastMessage = await this.chatService.getLastMessage(
-          username,
-          user.username,
-        );
-        return lastMessage;
-      }),
-    );
-
-    client.emit(
-      'lastMessages',
-      lastMessages.filter((msg) => msg !== null),
-    );
+      client.emit(
+        'lastMessages',
+        lastMessages.filter((msg) => msg !== null),
+      );
+    } catch (error) {
+      this.logger.error(`Error fetching last messages: ${error.message}`);
+    }
   }
 }

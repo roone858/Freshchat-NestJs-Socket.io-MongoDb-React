@@ -9,6 +9,6 @@ export interface User {
   name: string;
   username: string;
   image: string;
-  socketId: string;
-  lastSeen: string;
+  socketId: string | null;
+  lastSeen: Date;
 }

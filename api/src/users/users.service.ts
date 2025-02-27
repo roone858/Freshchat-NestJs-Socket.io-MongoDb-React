@@ -16,7 +16,42 @@ export class UsersService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
   ) {}
+  async generateUsers() {
+    const users = [];
 
+    for (let i = 1; i <= 20; i++) {
+      const passwordHash = await CryptoService.hash(`password${i}`);
+
+      users.push({
+        name: `User ${i}`,
+        username: `user${i}`,
+        email: `user${i}@test.com`,
+        password: passwordHash,
+        image: `/${i}.png`, // Image names from 1.png to 20.png
+        address: {
+          street: `Street ${i}`,
+          suite: `Suite ${i}`,
+          city: `City ${i}`,
+          zipcode: `1000${i}`,
+          geo: {
+            lat: (Math.random() * 180 - 90).toFixed(6),
+            lng: (Math.random() * 360 - 180).toFixed(6),
+          },
+        },
+        phone: `+12345678${i}`,
+        website: `user${i}.test.com`,
+        casl: {},
+        teamId: null,
+        resetPasswordCode: null,
+        resetPasswordExpires: null,
+        socketId: null,
+        lastSeen: new Date(),
+      });
+    }
+
+    await this.userModel.insertMany(users);
+    console.log('✅ 20 test users inserted successfully!');
+  }
   async create(createUserDto: CreateUserDto) {
     const passwordHash = await CryptoService.hash(createUserDto.password);
     const user = new this.userModel({
@@ -28,6 +63,12 @@ export class UsersService {
     const newUser = await user.save();
     return newUser;
   }
+  // Find a user by their socketId
+  async findUserBySocketId(socketId: string): Promise<User | null> {
+    return this.userModel.findOne({ socketId }).exec();
+  }
+
+  // Update user's socket ID and last seen timestamp
 
   async addMember(
     teamId: any,

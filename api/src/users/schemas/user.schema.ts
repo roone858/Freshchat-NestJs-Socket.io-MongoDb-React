@@ -46,22 +46,22 @@ export class User {
   @Prop({ required: true })
   password: string;
 
-  @Prop({ required: true })
+  @Prop({ default: '/default.png' })
   image: string;
 
-  @Prop({ type: Address, required: true })
+  @Prop({ type: Address })
   address: Address;
 
-  @Prop({ required: true })
+  @Prop({ default: null })
   phone: string;
 
-  @Prop({ required: true })
+  @Prop({ default: null })
   website: string;
 
   @Prop({ default: {}, type: CASL })
   casl: CASL;
 
-  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId })
+  @Prop({ type: mongoose.Schema.Types.ObjectId })
   teamId: mongoose.Schema.Types.ObjectId;
 
   @Prop({ type: String, default: null }) // Reset code (optional)

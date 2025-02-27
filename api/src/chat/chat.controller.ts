@@ -31,8 +31,7 @@ export class ChatController {
   @UseGuards(JwtAuthGuard)
   @Get('history/:receiver')
   async getChatHistory(
-    @Req() request: any, // 👈 احصل على المستخدم من الـ request
-    // @Param('sender') sender: string,
+    @Req() request: any,
     @Param('receiver') receiver: string,
   ): Promise<Message[]> {
     const sender = request.user._doc.username;

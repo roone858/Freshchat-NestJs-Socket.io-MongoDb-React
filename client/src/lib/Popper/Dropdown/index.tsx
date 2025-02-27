@@ -38,7 +38,13 @@ const Dropdown = ({
           <ul className="   z-50  text-gray-800 w-40 py-2  mt-4 text-left  bg-white  rounded shadow-2xl ltr:-right-4 dropdown-menu top-8 dark:bg-zinc-600 bg-clip-padding  rtl:-left-5">
             {items.map((item, index) => (
               <li key={index}>
-                <div className=" hover:cursor-pointer flex flex-row justify-between w-full px-4 py-2 text-sm font-normal text-gray-800 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30 dark:text-gray-100 dark:hover:bg-zinc-800 ltr:text-left rtl:text-right">
+                <div
+                  onClick={() => {
+                    item.label === "Log out" && sessionStorage.clear();
+                    window.location.href = "/";
+                  }}
+                  className=" hover:cursor-pointer flex flex-row justify-between w-full px-4 py-2 text-sm font-normal text-gray-800 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100/30 dark:text-gray-100 dark:hover:bg-zinc-800 ltr:text-left rtl:text-right"
+                >
                   {item.label}{" "}
                   <i
                     className={`text-gray-500 rtl:float-left ltr:float-right dark:text-gray-300 ${item.icon} text-16`}

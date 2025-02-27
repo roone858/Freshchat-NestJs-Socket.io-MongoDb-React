@@ -20,6 +20,10 @@ export class AuthController {
   async login(@Request() req) {
     return this.authService.login(req.user);
   }
+  @Post('register')
+  register(@Body() data: any) {
+    return this.authService.register(data);
+  }
   @Post('forgot-password')
   forgotPassword(@Body() data: any) {
     return this.authService.forgotPassword(data.email);
